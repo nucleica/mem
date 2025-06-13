@@ -1,0 +1,12 @@
+{
+  "name": "@nucleic/mem",
+  "version": "0.1.0",
+  "exports":"./main.ts",
+  "tasks": {
+    "main": "deno run --allow-read --allow-write example.ts"
+  },
+  "imports": {
+    "@std/assert": "jsr:@std/assert@1",
+    "@types/node": "npm:@types/node@^24.0.1"
+  }
+}
