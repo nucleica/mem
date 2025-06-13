@@ -45,8 +45,9 @@ export class Model {
     return this.db.prepare(selectById(this.table, id)).get();
   }
 
-  count() {
-    return this.db.prepare(count(this.table)).get();
+  count(): number | null {
+    const response = this.db.prepare(count(this.table)).get();
+    return response ? parseInt(response["COUNT(*)"] as string) : null;
   }
 
   update(id: number, values: { [key: string]: string }) {
