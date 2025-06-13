@@ -3,33 +3,33 @@ export function insert(table: string, props: string[]) {
   return `INSERT INTO ${table} (${props.join(", ")}) VALUES (${vals})`;
 }
 
-export function remove(table: string) {
+export function remove(table: string): string {
   return `DELETE FROM ${table} WHERE id = ?`;
 }
 
-export function update(table: string, id: number, props: string[]) {
+export function update(table: string, id: number, props: string[]): string {
   const setClause = props.map((prop) => `${prop} = ?`).join(", ");
   return `UPDATE ${table} SET ${setClause} WHERE id = ${id}`;
 }
 
-export function select(table: string) {
+export function select(table: string): string {
   return `SELECT * FROM ${table}`;
 }
 
 export function where(table: string, props: {
   [key: string]: string;
-}) {
+}): string {
   const whereClause = Object.entries(props)
     .map(([key, value]) => `${key} = '${value}'`);
 
-  return `SELECT * FROM ${table} ${whereClause}`;
+  return `SELECT * FROM ${table} WHERE ${whereClause.join(" AND ")}`;
 }
 
-export function selectById(table: string, id: number) {
+export function selectById(table: string, id: number): string {
   return `SELECT * FROM ${table} WHERE id = ${id}`;
 }
 
-export function count(table: string) {
+export function count(table: string): string {
   return `SELECT COUNT(*) FROM ${table}`;
 }
 

@@ -10,7 +10,10 @@ if (import.meta.main) {
     },
   });
 
-  const res = db.table("user")?.count();
+  const all = db.table("user")?.select();
 
-  console.log(res);
+  const where = db.table("user")?.where({ email: "Dam" });
+
+  console.log("all", all?.length);
+  console.log("where", where);
 }

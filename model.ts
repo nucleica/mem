@@ -11,6 +11,7 @@ import {
   update,
   where,
 } from "./helpers.ts";
+import { StatementResultingChanges } from "node:sqlite";
 
 export class Model {
   constructor(
@@ -29,7 +30,7 @@ export class Model {
     ).run(...values);
   }
 
-  remove(id: number) {
+  remove(id: number): StatementResultingChanges {
     return this.db.prepare(remove(this.table)).run(id);
   }
 
