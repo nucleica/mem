@@ -7,17 +7,10 @@ if (import.meta.main) {
         email: { type: "TEXT", unique: true, notNull: true },
         name: { type: "TEXT", notNull: true },
       },
+      "test": {
+        name: { type: "TEXT", notNull: true },
+        age: { type: "INTEGER" },
+      },
     },
   });
-
-  // const all = db.table("user")?.select();
-
-  // const where = db.table("user")?.where({ email: "Dam" });
-
-  const res = db.table("user")?.add(["da@ac.da", "Damo"]);
-
-  console.log(res);
-
-  // console.log("all", all?.length);
-  // console.log("where", where);
 }

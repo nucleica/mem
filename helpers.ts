@@ -27,13 +27,13 @@ export function where(table: string, props: {
     .map(([key, value]) => {
       let val = value;
 
-      if (typeof val === "string") {
-        val = `'${val}'`;
+      if (typeof val === "string" || typeof val === "number") {
+        val = `= '${val}'`;
       } else if (val === null) {
-        val = "NULL";
+        val = "is NULL";
       }
 
-      return `${key} = ${val}`;
+      return `${key} ${val}`;
     });
 
   return `SELECT * FROM ${table} WHERE ${whereClause.join(" AND ")}`;
