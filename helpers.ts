@@ -7,7 +7,11 @@ export function remove(table: string): string {
   return `DELETE FROM ${table} WHERE id = ?`;
 }
 
-export function update(table: string, id: number, props: (string | number)[]): string {
+export function update(
+  table: string,
+  id: number,
+  props: (string | number)[],
+): string {
   const setClause = props.map((prop) => `${prop} = ?`).join(", ");
   return `UPDATE ${table} SET ${setClause} WHERE id = ${id}`;
 }
@@ -17,10 +21,20 @@ export function select(table: string): string {
 }
 
 export function where(table: string, props: {
-  [key: string]: string | number;
+  [key: string]: string | number | null;
 }): string {
   const whereClause = Object.entries(props)
-    .map(([key, value]) => `${key} = '${value}'`);
+    .map(([key, value]) => {
+      let val = value;
+
+      if (typeof val === "string") {
+        val = `'${val}'`;
+      } else if (val === null) {
+        val = "NULL";
+      }
+
+      return `${key} = ${val}`;
+    });
 
   return `SELECT * FROM ${table} WHERE ${whereClause.join(" AND ")}`;
 }

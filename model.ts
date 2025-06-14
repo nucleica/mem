@@ -38,7 +38,7 @@ export class Model {
     return this.db.prepare(select(this.table)).all();
   }
 
-  where(props: { [key: string]: string | number }) {
+  where(props: { [key: string]: string | number | null }) {
     return this.db.prepare(where(this.table, props)).all();
   }
 
