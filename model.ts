@@ -24,7 +24,7 @@ export class Model {
     ).run();
   }
 
-  add(values: (string | number )[]) {
+  add(values: (string | number)[]) {
     return this.db.prepare(
       insert(this.table, Object.keys(this.props)),
     ).run(...values);
@@ -52,10 +52,8 @@ export class Model {
   }
 
   update(id: number, values: { [key: string]: string | number }) {
-    const props = Object.keys(this.props);
-
     return this.db.prepare(
-      update(this.table, id, props),
+      update(this.table, id, Object.keys(values)),
     ).run(...Object.values(values));
   }
 }
