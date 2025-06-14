@@ -29,34 +29,36 @@ export function select(table: string): string {
 export function where(table: string, props: {
   [key: string]: string | number | null;
 }, options: QueryOptions): string {
-  let opts = '';
+  let opts = "";
 
   if (options.orderBy) {
-    opts += ' ORDER BY ' + options.orderBy;
+    opts += "ORDER BY " + options.orderBy;
   }
 
   if (options.descending) {
-    opts += ' DESC';
+    opts += " DESC";
   }
 
   if (options.limit) {
-    opts += ' LIMIT ' + options.limit;
+    opts += " LIMIT " + options.limit;
   }
 
   const whereClause = Object.entries(props)
     .map(([key, value]) => {
       let val = value;
 
-      if (typeof val === "string" || typeof val === "number") {
+      if (typeof val === "string") {
         val = `= '${val}'`;
       } else if (val === null) {
         val = "is NULL";
+      } else {
+        val = `= ${val}`;
       }
 
       return `${key} ${val}`;
-    });
+    }).join(" AND ");
 
-  return `SELECT * FROM ${table} WHERE ${whereClause.join(" AND ")} ${opts}`;
+  return `SELECT * FROM ${table} WHERE ${whereClause} ${opts}`;
 }
 
 export function selectById(table: string, id: number): string {
