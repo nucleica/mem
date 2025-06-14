@@ -3,6 +3,12 @@ export function insert(table: string, props: (string | number)[]) {
   return `INSERT INTO ${table} (${props.join(", ")}) VALUES (${vals})`;
 }
 
+export interface QueryOptions {
+  descending?: boolean;
+  orderBy?: string;
+  limit?: number;
+}
+
 export function remove(table: string): string {
   return `DELETE FROM ${table} WHERE id = ?`;
 }
@@ -22,7 +28,21 @@ export function select(table: string): string {
 
 export function where(table: string, props: {
   [key: string]: string | number | null;
-}): string {
+}, options: QueryOptions): string {
+  let opts = '';
+
+  if (options.orderBy) {
+    opts += ' ORDER BY ' + options.orderBy;
+  }
+
+  if (options.descending) {
+    opts += ' DESC';
+  }
+
+  if (options.limit) {
+    opts += ' LIMIT ' + options.limit;
+  }
+
   const whereClause = Object.entries(props)
     .map(([key, value]) => {
       let val = value;
@@ -36,7 +56,7 @@ export function where(table: string, props: {
       return `${key} ${val}`;
     });
 
-  return `SELECT * FROM ${table} WHERE ${whereClause.join(" AND ")}`;
+  return `SELECT * FROM ${table} WHERE ${whereClause.join(" AND ")} ${opts}`;
 }
 
 export function selectById(table: string, id: number): string {

@@ -5,6 +5,7 @@ import {
   createTable,
   insert,
   type PropOptions,
+  type QueryOptions,
   remove,
   select,
   selectById,
@@ -38,8 +39,11 @@ export class Model {
     return this.db.prepare(select(this.table)).all();
   }
 
-  where(props: { [key: string]: string | number | null }) {
-    return this.db.prepare(where(this.table, props)).all();
+  where(
+    props: { [key: string]: string | number | null },
+    options: QueryOptions,
+  ) {
+    return this.db.prepare(where(this.table, props, options)).all();
   }
 
   selectByID(id: number) {
