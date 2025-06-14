@@ -10,10 +10,14 @@ if (import.meta.main) {
     },
   });
 
-  const all = db.table("user")?.select();
+  // const all = db.table("user")?.select();
 
-  const where = db.table("user")?.where({ email: "Dam" });
+  // const where = db.table("user")?.where({ email: "Dam" });
 
-  console.log("all", all?.length);
-  console.log("where", where);
+  const res = db.table("user")?.add(["da@ac.da", "Damo"]);
+
+  console.log(res);
+
+  // console.log("all", all?.length);
+  // console.log("where", where);
 }

@@ -1,4 +1,4 @@
-export function insert(table: string, props: string[]) {
+export function insert(table: string, props: (string | number)[]) {
   const vals = "?".repeat(props.length).split("").join(", ");
   return `INSERT INTO ${table} (${props.join(", ")}) VALUES (${vals})`;
 }
@@ -7,7 +7,7 @@ export function remove(table: string): string {
   return `DELETE FROM ${table} WHERE id = ?`;
 }
 
-export function update(table: string, id: number, props: string[]): string {
+export function update(table: string, id: number, props: (string | number)[]): string {
   const setClause = props.map((prop) => `${prop} = ?`).join(", ");
   return `UPDATE ${table} SET ${setClause} WHERE id = ${id}`;
 }
@@ -17,7 +17,7 @@ export function select(table: string): string {
 }
 
 export function where(table: string, props: {
-  [key: string]: string;
+  [key: string]: string | number;
 }): string {
   const whereClause = Object.entries(props)
     .map(([key, value]) => `${key} = '${value}'`);

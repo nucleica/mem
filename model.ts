@@ -24,7 +24,7 @@ export class Model {
     ).run();
   }
 
-  add(values: string[]) {
+  add(values: (string | number )[]) {
     return this.db.prepare(
       insert(this.table, Object.keys(this.props)),
     ).run(...values);
@@ -38,7 +38,7 @@ export class Model {
     return this.db.prepare(select(this.table)).all();
   }
 
-  where(props: { [key: string]: string }) {
+  where(props: { [key: string]: string | number }) {
     return this.db.prepare(where(this.table, props)).all();
   }
 
@@ -51,7 +51,7 @@ export class Model {
     return response ? parseInt(response["COUNT(*)"] as string) : null;
   }
 
-  update(id: number, values: { [key: string]: string }) {
+  update(id: number, values: { [key: string]: string | number }) {
     const props = Object.keys(this.props);
 
     return this.db.prepare(
