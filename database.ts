@@ -10,7 +10,7 @@ export interface DatabaseOptions {
 export class Database {
   db: DatabaseSync;
 
-  models: Map<string, Model> = new Map();
+  models: Map<string, Model<unknown>> = new Map();
 
   constructor(
     { path, models }: DatabaseOptions,
@@ -36,7 +36,7 @@ export class Database {
     return model;
   }
 
-  table(name: string) {
-    return this.models.get(name);
+  table<Type>(name: string) {
+    return this.models.get(name) as Model<Type>;
   }
 }

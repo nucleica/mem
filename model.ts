@@ -1,5 +1,7 @@
 import type { DatabaseSync } from "node:sqlite";
 
+import { EventEmitter } from "node:events";
+import type { StatementResultingChanges } from "node:sqlite";
 import {
   count,
   createTable,
@@ -12,42 +14,55 @@ import {
   update,
   where,
 } from "./helpers.ts";
-import { StatementResultingChanges } from "node:sqlite";
 
-export class Model {
+export class Model<Type> extends EventEmitter {
   constructor(
     private db: DatabaseSync,
     private table: string,
     private props: PropOptions,
   ) {
+    super();
+
     db.prepare(
       createTable(table, props),
     ).run();
   }
 
   add(values: (string | number)[]) {
-    return this.db.prepare(
+    const response = this.db.prepare(
       insert(this.table, Object.keys(this.props)),
     ).run(...values);
+
+    this.emit("added", values, response);
+
+    return response;
   }
 
   remove(id: number): StatementResultingChanges {
-    return this.db.prepare(remove(this.table)).run(id);
+    const response = this.db.prepare(remove(this.table)).run(id);
+    this.emit("removed", id, response);
+    return response;
   }
 
   select() {
-    return this.db.prepare(select(this.table)).all();
+    return this.db.prepare(select(this.table)).all() as Record<string, Type>[];
   }
 
   where(
     props: { [key: string]: string | number | null },
-    options: QueryOptions,
+    options: QueryOptions = {},
   ) {
-    return this.db.prepare(where(this.table, props, options)).all();
+    return this.db.prepare(where(this.table, props, options)).all() as Record<
+      string,
+      Type
+    >[];
   }
 
   selectByID(id: number) {
-    return this.db.prepare(selectById(this.table, id)).get();
+    return this.db.prepare(selectById(this.table, id)).get() as Record<
+      string,
+      Type
+    >;
   }
 
   count(): number | null {
@@ -56,8 +71,12 @@ export class Model {
   }
 
   update(id: number, values: { [key: string]: string | number }) {
-    return this.db.prepare(
+    const response = this.db.prepare(
       update(this.table, id, Object.keys(values)),
     ).run(...Object.values(values));
+
+    this.emit("updated", id, values, response);
+
+    return response;
   }
 }
