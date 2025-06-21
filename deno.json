@@ -1,11 +1,14 @@
 {
   "name": "@nucleic/mem",
   "version": "0.3.0",
-  "exports":"./main.ts",
+  "exports": "./main.ts",
   "tasks": {
-    "main": "deno run --allow-read --allow-write example.ts"
+    "example": "deno run --allow-read --allow-write example.ts",
+    "init": "deno run --allow-net --allow-read --allow-write share.ts"
   },
   "imports": {
+    "@nucleic/turtle": "jsr:@nucleic/turtle@^0.5.1",
+    "@nucleic/venous": "jsr:@nucleic/venous@^0.1.0",
     "@std/assert": "jsr:@std/assert@1",
     "@types/node": "npm:@types/node@^24.0.1"
   }
