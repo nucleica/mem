@@ -1,16 +1,20 @@
-export function insert(table: string, props: (string | number)[]) {
-  const vals = "?".repeat(props.length).split("").join(", ");
-  return `INSERT INTO ${table} (${props.join(", ")}) VALUES (${vals})`;
-}
-
 export interface QueryOptions {
   descending?: boolean;
   orderBy?: string;
   limit?: number;
 }
 
+export interface ModelUpdateValues {
+  [key: string]: string | number;
+}
+
 export function remove(table: string): string {
   return `DELETE FROM ${table} WHERE id = ?`;
+}
+
+export function insert(table: string, props: (string | number)[]) {
+  const vals = "?".repeat(props.length).split("").join(", ");
+  return `INSERT INTO ${table} (${props.join(", ")}) VALUES (${vals})`;
 }
 
 export function update(

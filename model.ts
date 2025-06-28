@@ -6,6 +6,7 @@ import {
   count,
   createTable,
   insert,
+  type ModelUpdateValues,
   type PropOptions,
   type QueryOptions,
   remove,
@@ -28,12 +29,22 @@ export class Model<Type> extends EventEmitter {
     ).run();
   }
 
-  add(values: (string | number)[]) {
+  add(values: ModelUpdateValues) {
     const response = this.db.prepare(
-      insert(this.table, Object.keys(this.props)),
-    ).run(...values);
+      insert(this.table, Object.keys(values)),
+    ).run(...Object.values(values));
 
     this.emit("added", values, response);
+
+    return response;
+  }
+
+  update(id: number, values: ModelUpdateValues) {
+    const response = this.db.prepare(
+      update(this.table, id, Object.keys(values)),
+    ).run(...Object.values(values));
+
+    this.emit("updated", id, values, response);
 
     return response;
   }
@@ -68,15 +79,5 @@ export class Model<Type> extends EventEmitter {
   count(): number | null {
     const response = this.db.prepare(count(this.table)).get();
     return response ? parseInt(response["COUNT(*)"] as string) : null;
-  }
-
-  update(id: number, values: { [key: string]: string | number }) {
-    const response = this.db.prepare(
-      update(this.table, id, Object.keys(values)),
-    ).run(...Object.values(values));
-
-    this.emit("updated", id, values, response);
-
-    return response;
   }
 }
