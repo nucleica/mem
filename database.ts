@@ -24,6 +24,12 @@ export class Database {
     }
   }
 
+  enable({ foreign }: { foreign?: boolean } = {}) {
+    if (foreign) {
+      this.db.exec("PRAGMA foreign_keys = ON;");
+    }
+  }
+
   addModel(table: string, props: PropOptions) {
     if (this.models.has(table)) {
       throw new Error("Cannot add model as it already exsist");

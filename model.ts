@@ -15,7 +15,7 @@ import {
   update,
   where,
 } from "./helpers.ts";
-import { SQLInputValue } from "node:sqlite";
+import type { StatementSync } from "node:sqlite";
 
 export class Model<Type> extends EventEmitter {
   constructor(
@@ -30,7 +30,7 @@ export class Model<Type> extends EventEmitter {
     ).run();
   }
 
-  execute(sql: string, ) {
+  execute(sql: string): StatementSync {
     return this.db.prepare(sql);
   }
 

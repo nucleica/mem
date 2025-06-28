@@ -81,13 +81,25 @@ export interface PropOption {
   type: "TEXT" | "INTEGER" | "REAL" | "BLOB";
   notNull?: boolean;
   unique?: boolean;
+  foreign?: string;
 }
 
 export function createTable(name: string, props: PropOptions): string {
   return `CREATE TABLE IF NOT EXISTS ${name} (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     ${parseProps(props)}
+    ${parseForeign(props)}
   );`;
+}
+
+export function parseForeign(props: PropOptions): string {
+  if (Object.values(props).some(({ foreign }) => !!foreign)) {
+    return ", " + Object.entries(props).map(([name, { foreign }]) => {
+      return `FOREIGN KEY (${name}) REFERENCES ${foreign}(id)`;
+    }).join(",");
+  }
+
+  return "";
 }
 
 export function parseProps(props: PropOptions): string {
