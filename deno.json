@@ -1,6 +1,6 @@
 {
   "name": "@nucleic/mem",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "exports": "./main.ts",
   "tasks": {
     "example": "deno run --allow-read --allow-write example.ts",

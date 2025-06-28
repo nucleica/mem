@@ -15,6 +15,7 @@ import {
   update,
   where,
 } from "./helpers.ts";
+import { SQLInputValue } from "node:sqlite";
 
 export class Model<Type> extends EventEmitter {
   constructor(
@@ -27,6 +28,10 @@ export class Model<Type> extends EventEmitter {
     db.prepare(
       createTable(table, props),
     ).run();
+  }
+
+  execute(sql: string, params: SQLInputValue) {
+    return this.db.prepare(sql).run(params);
   }
 
   add(values: ModelUpdateValues) {
