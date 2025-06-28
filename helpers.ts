@@ -94,9 +94,12 @@ export function createTable(name: string, props: PropOptions): string {
 
 export function parseForeign(props: PropOptions): string {
   if (Object.values(props).some(({ foreign }) => !!foreign)) {
-    return ", " + Object.entries(props).map(([name, { foreign }]) => {
-      return `FOREIGN KEY (${name}) REFERENCES ${foreign}(id)`;
-    }).join(",");
+    return ", " +
+      Object.entries(props).filter(([name, { foreign }]) => !!foreign).map(
+        ([name, { foreign }]) => {
+          return `FOREIGN KEY (${name}) REFERENCES ${foreign}(id)`;
+        },
+      ).join(",");
   }
 
   return "";

@@ -35,9 +35,18 @@ export class Model<Type> extends EventEmitter {
   }
 
   add(values: ModelUpdateValues) {
-    const response = this.db.prepare(
-      insert(this.table, Object.keys(values)),
-    ).run(...Object.values(values));
+    let response;
+
+    try {
+      response = this.db.prepare(
+        insert(this.table, Object.keys(values)),
+      ).run(
+        ...Object.values(values),
+      );
+    } catch (error) {
+      console.log(this.table, "failed to add");
+      response = { error };
+    }
 
     this.emit("added", values, response);
 
