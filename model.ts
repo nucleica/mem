@@ -30,8 +30,12 @@ export class Model<Type> extends EventEmitter {
     ).run();
   }
 
-  execute(sql: string, params: SQLInputValue) {
-    return this.db.prepare(sql).run(params);
+  execute(sql: string, params?: SQLInputValue[]) {
+    if (params) {
+      return this.db.prepare(sql).run(...params);
+    }
+
+    return this.db.prepare(sql).run();
   }
 
   add(values: ModelUpdateValues) {
